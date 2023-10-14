@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import br.com.marketlist.model.ProductItem
+import br.com.marketlist.data.ProductItem
 import br.com.marketlist.ui.components.ProductItemCardComponent
 
 @Composable

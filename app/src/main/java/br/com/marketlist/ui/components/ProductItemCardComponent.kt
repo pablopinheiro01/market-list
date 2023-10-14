@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.marketlist.model.ProductItem
+import br.com.marketlist.data.ProductItem
 import br.com.marketlist.sampledata.sampleFirstList
 
 @Preview

@@ -1,6 +1,6 @@
 package br.com.marketlist.sampledata
 
-import br.com.marketlist.model.ProductItem
+import br.com.marketlist.data.ProductItem
 
 val sampleFirstList: List<ProductItem> = listOf(
     ProductItem(
