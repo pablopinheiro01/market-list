@@ -29,8 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import br.com.marketlist.R
 import br.com.marketlist.data.ProductItem
+import br.com.marketlist.navigation.navigateToFormMarketListScreen
 import br.com.marketlist.sampledata.sampleFirstList
 import br.com.marketlist.ui.components.ProductItemCardComponent
 import br.com.marketlist.ui.theme.MarketListTheme
@@ -39,7 +41,8 @@ import br.com.marketlist.ui.theme.MarketListTheme
 @Composable
 fun HomeListViewMarketScreen(
     modifier: Modifier = Modifier,
-    listItens: List<ProductItem>
+    listItens: List<ProductItem>,
+    onClickNavigateToMarket: () -> Unit = {},
 ) {
 
     Scaffold(
@@ -56,7 +59,9 @@ fun HomeListViewMarketScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    onClickNavigateToMarket()
+                },
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -92,47 +97,4 @@ fun HomeListViewMarketScreenPreview() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun FormMarketListScreen(
-    modifier: Modifier = Modifier
-) {
-    val teste = ""
-    Scaffold { paddingValues ->
-        Column(modifier.padding(paddingValues)) {
-            Column(
-                modifier.padding(start = 16.dp, top = 16.dp, bottom = 0.dp, end= 16.dp)
 
-            ) {
-
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 300.dp, max = 330.dp),
-                    value = teste,
-                    onValueChange = { },
-                )
-            }
-            Column(
-                modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)
-            ) {
-                Button(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth())
-                {
-                    Text("Transform")
-                }
-            }
-        }
-
-    }
-}
-
-@Preview
-@Composable
-fun FormMarketListScreenPreview() {
-    MarketListTheme {
-        Surface {
-            FormMarketListScreen()
-        }
-    }
-    
-}

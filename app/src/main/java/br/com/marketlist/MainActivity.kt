@@ -13,6 +13,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import br.com.marketlist.navigation.MarkListNavHost
+import br.com.marketlist.navigation.navigateToFormMarketListScreen
 import br.com.marketlist.sampledata.sampleFirstList
 import br.com.marketlist.ui.screens.HomeListViewMarketScreen
 import br.com.marketlist.ui.theme.MarketListTheme
@@ -39,9 +42,12 @@ class MainActivity : ComponentActivity() {
 fun App(modifier: Modifier = Modifier) {
     Scaffold() {
         Box(modifier = modifier.padding(it)) {
-            HomeListViewMarketScreen(listItens = sampleFirstList)
+            val navController = rememberNavController()
+            MarkListNavHost(navController = navController)
+
         }
     }
+
 }
 
 
