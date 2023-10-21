@@ -19,7 +19,9 @@ import br.com.marketlist.navigation.navigateToFormMarketListScreen
 import br.com.marketlist.sampledata.sampleFirstList
 import br.com.marketlist.ui.screens.HomeListViewMarketScreen
 import br.com.marketlist.ui.theme.MarketListTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

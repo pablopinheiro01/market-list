@@ -10,7 +10,6 @@ import br.com.marketlist.ui.screens.HomeListViewMarketScreen
 const val marketListRoute = "marketList"
 fun NavGraphBuilder.marketListScreen(
     navController: NavController
-//TODO methods callbacks
 ) {
     composable(marketListRoute) {
         HomeListViewMarketScreen(
