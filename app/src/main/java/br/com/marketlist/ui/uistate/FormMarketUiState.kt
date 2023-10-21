@@ -1,6 +1,10 @@
 package br.com.marketlist.ui.uistate
 
 data class FormMarketUiState(
-    val valueInput: String = "",
-    var listItemsFormated: List<String> = emptyList()
-)
+    var valueInput: String = "",
+    val showSaveBottom: Boolean = false,
+    val listItemsFormated: List<String> = emptyList(),
+    val onValueChangeList: (value: String) -> Unit = {},
+    val onSaveMarketList: () -> Unit = {}
+) {
+}
