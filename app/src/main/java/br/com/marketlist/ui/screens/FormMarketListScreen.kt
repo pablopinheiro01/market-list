@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.marketlist.ui.components.RowDataFormatedComponent
 import br.com.marketlist.ui.theme.MarketListTheme
 import br.com.marketlist.ui.uistate.FormMarketUiState
 import br.com.marketlist.ui.viewmodels.FormMarketListViewModel
@@ -187,59 +188,7 @@ fun FormMarketListScreen(
     }
 }
 
-@Composable
-fun RowDataFormatedComponent(
-    modifier: Modifier = Modifier,
-    item: String = "",
-    position: Int = 0,
-    onRemoveItemTransformed: (position: Int) -> Unit = {}
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Row(
-            modifier = modifier
-                .padding(
-                    top = 8.dp,
-                    bottom = 8.dp
-                )
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                modifier = modifier
-                    .weight(1f)
-                    .align(CenterVertically),
-                text = "$item",
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = modifier.width(20.dp))
-            IconButton(
-                modifier = modifier
-                    .weight(1f)
-                    .align(CenterVertically),
-                onClick = { onRemoveItemTransformed(position) }
-            ) {
-                Icon(
-                    Icons.Default.Delete,
-                    tint = Color.Black,
-                    contentDescription = "Deletar"
-                )
-            }
-        }
-    }
-}
 
-@Preview
-@Composable
-fun RowDataFormatedComponentPreview() {
-    MarketListTheme {
-        RowDataFormatedComponent(
-            item = "Maça"
-        )
-    }
-}
 
 
 @Preview(showSystemUi = true)
