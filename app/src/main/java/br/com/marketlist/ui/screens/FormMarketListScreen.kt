@@ -12,22 +12,30 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.marketlist.ui.theme.MarketListTheme
@@ -37,25 +45,25 @@ import br.com.marketlist.ui.viewmodels.FormMarketListViewModel
 
 @Composable
 fun FormMarketListScreen(
-    viewModel: FormMarketListViewModel,
     state: FormMarketUiState,
-    onValueChangeList: (value: String) -> Unit = {},
-    onSaveMarketList: () -> Unit = {}
+    viewModel: FormMarketListViewModel
 ) {
-
     FormMarketListScreen(
         state = state,
         onValueChangeList = {
-            onValueChangeList(it)
+            state.onValueChangeList(it)
         },
         onClickTransformToList = {
             viewModel.transformStringToItems()
         },
         onSaveMarketList = {
-            onSaveMarketList()
+            state.onSaveMarketList()
+        },
+        onRemoveItemTransformed = {
+            viewModel.removeOptionListTransformed(it)
+//            state.onRemoveItemTransformed(it)
         }
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -65,7 +73,8 @@ fun FormMarketListScreen(
     state: FormMarketUiState,
     onValueChangeList: (value: String) -> Unit = {},
     onClickTransformToList: () -> Unit = {},
-    onSaveMarketList: () -> Unit = {}
+    onSaveMarketList: () -> Unit = {},
+    onRemoveItemTransformed: (position: Int) -> Unit = {}
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -138,7 +147,7 @@ fun FormMarketListScreen(
                             ) {
                                 Button(
                                     onClick = {
-
+                                        onSaveMarketList()
                                     },
                                     modifier = modifier.fillMaxWidth()
                                 )
@@ -148,9 +157,7 @@ fun FormMarketListScreen(
                             }
                         }
                     }
-
                 }
-
             }
 
             LazyColumn(
@@ -163,8 +170,14 @@ fun FormMarketListScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp, CenterVertically)
             ) {
                 item { Spacer(modifier = Modifier) }
-                items(state.listItemsFormated) {
-                    RowDataFormatedComponent(item = it)
+                itemsIndexed(state.listItemsFormated) { index, item ->
+                    RowDataFormatedComponent(
+                        item = item,
+                        position = index,
+                        onRemoveItemTransformed = {
+                            onRemoveItemTransformed(it)
+                        }
+                    )
                 }
                 item { Spacer(modifier = Modifier) }
             }
@@ -177,12 +190,13 @@ fun FormMarketListScreen(
 @Composable
 fun RowDataFormatedComponent(
     modifier: Modifier = Modifier,
-    item: String = ""
+    item: String = "",
+    position: Int = 0,
+    onRemoveItemTransformed: (position: Int) -> Unit = {}
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-
     ) {
         Row(
             modifier = modifier
@@ -190,23 +204,29 @@ fun RowDataFormatedComponent(
                     top = 8.dp,
                     bottom = 8.dp
                 )
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
         ) {
-            Checkbox(
-                modifier = modifier
-                    .padding(start = 8.dp)
-                    .align(alignment = CenterVertically)
-                    .widthIn(20.dp),
-                checked = false,
-                onCheckedChange = {
-                    //TODO
-                }
-            )
             Text(
                 modifier = modifier
+                    .weight(1f)
                     .align(CenterVertically),
-                text = "$item"
+                text = "$item",
+                textAlign = TextAlign.Center
             )
+            Spacer(modifier = modifier.width(20.dp))
+            IconButton(
+                modifier = modifier
+                    .weight(1f)
+                    .align(CenterVertically),
+                onClick = { onRemoveItemTransformed(position) }
+            ) {
+                Icon(
+                    Icons.Default.Delete,
+                    tint = Color.Black,
+                    contentDescription = "Deletar"
+                )
+            }
         }
     }
 }
@@ -229,14 +249,15 @@ fun FormMarketListScreenShowSaveButtomDontShowSavePreview() {
         Surface {
             FormMarketListScreen(
                 state = FormMarketUiState(
-                    valueInput = "Maça\nManga\nBanana",
+                    valueInput = "Picanha do Boi Azul\nMaça\nManga\nBanana\nCandida Bauro\nCocokito Parabueno",
                     showSaveBottom = false,
-                    listItemsFormated = listOf("Maça", "Manga", "Banana")
+                    listItemsFormated = mutableListOf("Picanha do Boi Azul","Maça", "Manga", "Banana", "Candida Bauro", "Cocokito Parabueno")
                 )
             )
         }
     }
 }
+
 @Preview(showSystemUi = true)
 @Composable
 fun FormMarketListScreenShowSaveButtomPreview() {
@@ -246,7 +267,7 @@ fun FormMarketListScreenShowSaveButtomPreview() {
                 state = FormMarketUiState(
                     valueInput = "Maça\nManga\nBanana",
                     showSaveBottom = true,
-                    listItemsFormated = listOf("Maça", "Manga", "Banana")
+                    listItemsFormated = mutableListOf("Maça", "Manga", "Banana")
                 )
             )
         }
@@ -261,7 +282,7 @@ fun FormMarketListScreenPreview() {
             FormMarketListScreen(
                 state = FormMarketUiState(
                     valueInput = "",
-                    listItemsFormated = listOf()
+                    listItemsFormated = mutableListOf()
                 )
             )
         }

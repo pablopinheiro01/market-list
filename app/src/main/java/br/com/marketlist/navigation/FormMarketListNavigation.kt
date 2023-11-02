@@ -24,9 +24,7 @@ fun NavGraphBuilder.formMarketListScreen(
 
         FormMarketListScreen(
             state = state,
-            viewModel = viewModel,
-            onValueChangeList = { state.onValueChangeList(it) },
-            onSaveMarketList = { state.onSaveMarketList() }
+            viewModel = viewModel
         )
     }
 }
