@@ -24,7 +24,8 @@ fun NavGraphBuilder.formMarketListScreen(
 
         FormMarketListScreen(
             state = state,
-            viewModel = viewModel
+            viewModel = viewModel,
+            navController = navController
         )
     }
 }

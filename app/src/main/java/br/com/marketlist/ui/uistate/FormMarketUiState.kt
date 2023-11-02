@@ -6,5 +6,4 @@ data class FormMarketUiState(
     val listItemsFormated: MutableList<String> = mutableListOf(),
     val onValueChangeList: (value: String) -> Unit = {},
     val onSaveMarketList: () -> Unit = {},
-    val onRemoveItemTransformed: (position: Int) -> Unit = {}
 )

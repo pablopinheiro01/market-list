@@ -10,3 +10,10 @@ data class ProductItem(
     val name:String = "",
     val bought:Boolean = false
 )
+
+@Entity
+data class ItemsProduct(
+    @PrimaryKey(autoGenerate = true)
+    val id:Long = 0L,
+    val list:List<ProductItem> = listOf()
+)

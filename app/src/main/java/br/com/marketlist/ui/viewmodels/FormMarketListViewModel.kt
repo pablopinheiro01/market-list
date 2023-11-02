@@ -1,18 +1,23 @@
 package br.com.marketlist.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import br.com.marketlist.data.ItemsProduct
+import br.com.marketlist.data.ProductItem
+import br.com.marketlist.database.ProductItemDao
 import br.com.marketlist.ui.uistate.FormMarketUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FormMarketListViewModel @Inject constructor(
-
+    private val dao: ProductItemDao
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FormMarketUiState())
@@ -30,18 +35,20 @@ class FormMarketListViewModel @Inject constructor(
                     )
                 },
                 onSaveMarketList = {
-                    //TODO
-                },
-                onRemoveItemTransformed = { position ->
-//                    removeOptionListTransformed(position)
-//                    val listMutable = _uiState.value.listItemsFormated
-//                    listMutable.removeAt(position)
-                    _uiState.value.listItemsFormated.removeAt(position)
-                    _uiState.value = _uiState.value.copy(
-                        listItemsFormated = _uiState.value.listItemsFormated
-                    )
+                    saveMarketList()
                 }
             )
+        }
+    }
+
+    fun saveMarketList(){
+        val listProductItems: MutableList<ProductItem> = mutableListOf()
+        _uiState.value.listItemsFormated.forEach { item ->
+            listProductItems.add(ProductItem(name = item))
+        }
+//        dao.save(ItemsProduct(list = listProductItems))
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.save(listProductItems)
         }
     }
 
@@ -63,17 +70,14 @@ class FormMarketListViewModel @Inject constructor(
     }
 
     fun removeOptionListTransformed(position: Int) {
-        Log.i(TAG, "removeOptionListTransformed: $position")
-        val listnew = mutableListOf<String>()
-        listnew.addAll(uiState.value.listItemsFormated)
-       listnew.removeAt(position)
+        val temporaryListNew = mutableListOf<String>()
+        temporaryListNew.addAll(uiState.value.listItemsFormated)
+       temporaryListNew.removeAt(position)
         _uiState.value.run {
             _uiState.value = _uiState.value.copy(
-                listItemsFormated = listnew
+                listItemsFormated = temporaryListNew
             )
         }
-
-
     }
 
     companion object {

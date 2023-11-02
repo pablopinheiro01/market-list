@@ -29,19 +29,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import br.com.marketlist.R
+import br.com.marketlist.data.ItemsProduct
 import br.com.marketlist.data.ProductItem
 import br.com.marketlist.navigation.navigateToFormMarketListScreen
+import br.com.marketlist.sampledata.sampleFirstItemsProduct
 import br.com.marketlist.sampledata.sampleFirstList
 import br.com.marketlist.ui.components.ProductItemCardComponent
 import br.com.marketlist.ui.theme.MarketListTheme
+import br.com.marketlist.ui.uistate.FormMarketUiState
+import br.com.marketlist.ui.uistate.MarketListUiState
+import br.com.marketlist.ui.viewmodels.FormMarketListViewModel
+import br.com.marketlist.ui.viewmodels.MarketListViewModel
+
+@Composable
+fun HomeListViewMarketScreen(
+    state: MarketListUiState,
+    viewModel: MarketListViewModel,
+    navController: NavController
+) {
+
+    HomeListViewMarketScreen(
+        modifier = Modifier,
+        items = state.products,
+        onClickNavigateToMarket = {
+            navController.navigateToFormMarketListScreen()
+        }
+    )
+
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeListViewMarketScreen(
     modifier: Modifier = Modifier,
-    listItens: List<ProductItem>,
+    items: List<ProductItem> = emptyList(),
     onClickNavigateToMarket: () -> Unit = {},
 ) {
 
@@ -77,7 +103,7 @@ fun HomeListViewMarketScreen(
             contentPadding = PaddingValues(8.dp)
         ) {
             item { Spacer(modifier = Modifier) }
-            items(listItens) { item ->
+            items(items) { item ->
                 ProductItemCardComponent(item = item)
             }
             item { Spacer(modifier = Modifier) }
@@ -92,7 +118,7 @@ fun HomeListViewMarketScreen(
 fun HomeListViewMarketScreenPreview() {
     MarketListTheme {
         Surface {
-            HomeListViewMarketScreen(listItens = sampleFirstList)
+            HomeListViewMarketScreen(items = sampleFirstList)
         }
     }
 }
