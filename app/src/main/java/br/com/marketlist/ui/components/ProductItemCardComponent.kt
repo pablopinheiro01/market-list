@@ -28,7 +28,8 @@ fun ProductItemCardComponentPreview() {
 @Composable
 fun ProductItemCardComponent(
     modifier: Modifier = Modifier,
-    item: ProductItem
+    item: ProductItem,
+    onClickItem: (idItemClicked: Long) -> Unit = {}
 ) {
     Card(
         modifier = modifier
@@ -41,8 +42,10 @@ fun ProductItemCardComponent(
         Row {
             Column {
                 Checkbox(
-                    checked = false,
-                    onCheckedChange = {}
+                    checked = item.bought,
+                    onCheckedChange = {
+                        onClickItem(item.id)
+                    }
                 )
             }
             Spacer(modifier = modifier.width(10.dp))

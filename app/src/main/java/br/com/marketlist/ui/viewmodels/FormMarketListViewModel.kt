@@ -41,7 +41,7 @@ class FormMarketListViewModel @Inject constructor(
         }
     }
 
-    fun saveMarketList(){
+    fun saveMarketList() {
         val listProductItems: MutableList<ProductItem> = mutableListOf()
         _uiState.value.listItemsFormated.forEach { item ->
             listProductItems.add(ProductItem(name = item))
@@ -72,7 +72,7 @@ class FormMarketListViewModel @Inject constructor(
     fun removeOptionListTransformed(position: Int) {
         val temporaryListNew = mutableListOf<String>()
         temporaryListNew.addAll(uiState.value.listItemsFormated)
-       temporaryListNew.removeAt(position)
+        temporaryListNew.removeAt(position)
         _uiState.value.run {
             _uiState.value = _uiState.value.copy(
                 listItemsFormated = temporaryListNew

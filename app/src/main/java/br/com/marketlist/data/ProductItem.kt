@@ -8,7 +8,7 @@ data class ProductItem(
     @PrimaryKey(autoGenerate = true)
     val id:Long = 0L,
     val name:String = "",
-    val bought:Boolean = false
+    var bought:Boolean = false
 )
 
 @Entity

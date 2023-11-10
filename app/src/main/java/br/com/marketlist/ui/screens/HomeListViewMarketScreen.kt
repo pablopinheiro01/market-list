@@ -57,6 +57,9 @@ fun HomeListViewMarketScreen(
         items = state.products,
         onClickNavigateToMarket = {
             navController.navigateToFormMarketListScreen()
+        },
+        onClickItemCheck = {id ->
+            viewModel.onClickBoughtItem(id)
         }
     )
 
@@ -69,6 +72,7 @@ fun HomeListViewMarketScreen(
     modifier: Modifier = Modifier,
     items: List<ProductItem> = emptyList(),
     onClickNavigateToMarket: () -> Unit = {},
+    onClickItemCheck: (idItemClicked: Long) -> Unit = {}
 ) {
 
     Scaffold(
@@ -96,15 +100,19 @@ fun HomeListViewMarketScreen(
             }
         }
     ) { paddingValues ->
-
         LazyColumn(
             modifier = modifier.padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(8.dp)
+            contentPadding = PaddingValues(6.dp)
         ) {
             item { Spacer(modifier = Modifier) }
             items(items) { item ->
-                ProductItemCardComponent(item = item)
+                    ProductItemCardComponent(
+                        item = item,
+                        onClickItem = {idItemClicked ->
+                            onClickItemCheck(idItemClicked)
+                        }
+                    )
             }
             item { Spacer(modifier = Modifier) }
         }
