@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MarketList</string>
     <string name="add_new">Add New</string>
+    <string name="title_list">Your List</string>
 </resources>

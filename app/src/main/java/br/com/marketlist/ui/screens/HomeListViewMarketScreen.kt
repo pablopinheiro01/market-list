@@ -3,6 +3,7 @@ package br.com.marketlist.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,10 +14,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -55,10 +60,11 @@ fun HomeListViewMarketScreen(
     HomeListViewMarketScreen(
         modifier = Modifier,
         items = state.products,
+        isShowFinishedMarket = state.isShowFinishedMarket,
         onClickNavigateToMarket = {
             navController.navigateToFormMarketListScreen()
         },
-        onClickItemCheck = {id ->
+        onClickItemCheck = { id ->
             viewModel.onClickBoughtItem(id)
         }
     )
@@ -71,6 +77,7 @@ fun HomeListViewMarketScreen(
 fun HomeListViewMarketScreen(
     modifier: Modifier = Modifier,
     items: List<ProductItem> = emptyList(),
+    isShowFinishedMarket: Boolean = false,
     onClickNavigateToMarket: () -> Unit = {},
     onClickItemCheck: (idItemClicked: Long) -> Unit = {}
 ) {
@@ -84,7 +91,23 @@ fun HomeListViewMarketScreen(
                     titleContentColor = MaterialTheme.colorScheme.primary
                 ),
 
-                title = { Text(text = stringResource(id = R.string.app_name)) },
+                title = { Text(text = stringResource(id = R.string.title_list)) },
+                navigationIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Desc"
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "desc"
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -105,16 +128,22 @@ fun HomeListViewMarketScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(6.dp)
         ) {
-            item { Spacer(modifier = Modifier) }
-            items(items) { item ->
-                    ProductItemCardComponent(
-                        item = item,
-                        onClickItem = {idItemClicked ->
-                            onClickItemCheck(idItemClicked)
-                        }
-                    )
+            if (!isShowFinishedMarket) {
+                item { Spacer(modifier = modifier) }
+                items(items) { item ->
+                    if (!item.bought) {
+                        ProductItemCardComponent(
+                            item = item,
+                            onClickItem = { idItemClicked ->
+                                onClickItemCheck(idItemClicked)
+                            }
+                        )
+                    }
+                }
+                item { Spacer(modifier = modifier) }
+            }else{
+                item{Text(text = "Finished Congrats!")}
             }
-            item { Spacer(modifier = Modifier) }
         }
     }
 
@@ -132,3 +161,12 @@ fun HomeListViewMarketScreenPreview() {
 }
 
 
+@Preview(showSystemUi = true)
+@Composable
+fun HomeListViewMarketScreenPreviewEmtpyList() {
+    MarketListTheme {
+        Surface {
+            HomeListViewMarketScreen(isShowFinishedMarket = true, items = emptyList())
+        }
+    }
+}

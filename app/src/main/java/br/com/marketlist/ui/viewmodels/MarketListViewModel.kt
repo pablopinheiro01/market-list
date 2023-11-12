@@ -51,20 +51,20 @@ class MarketListViewModel @Inject constructor(
                 .map { itemState ->
                     if (itemState.id == item.id) itemState.copy(bought = true) else itemState
                 }
-
+            val verifiedObjects = productsModify.all { it.bought }
 //           productsModify = productsModify.sortedBy { it.bought }
 
             _uiState.update { currentState ->
                 currentState.copy(
-                    products = productsModify
+                    products = productsModify,
+                    isShowFinishedMarket = verifiedObjects
                 )
             }
 
-
             dao.updateItemBought(item)
-
         }
 
     }
+
 
 }
