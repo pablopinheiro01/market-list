@@ -66,6 +66,9 @@ fun HomeListViewMarketScreen(
         },
         onClickItemCheck = { id ->
             viewModel.onClickBoughtItem(id)
+        },
+        onClickDeleteAllList = {
+            viewModel.onClickDeleteAllList()
         }
     )
 
@@ -79,7 +82,8 @@ fun HomeListViewMarketScreen(
     items: List<ProductItem> = emptyList(),
     isShowFinishedMarket: Boolean = false,
     onClickNavigateToMarket: () -> Unit = {},
-    onClickItemCheck: (idItemClicked: Long) -> Unit = {}
+    onClickItemCheck: (idItemClicked: Long) -> Unit = {},
+    onClickDeleteAllList: () -> Unit = {}
 ) {
 
     Scaffold(
@@ -101,7 +105,7 @@ fun HomeListViewMarketScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { onClickDeleteAllList() }) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
                             contentDescription = "desc"

@@ -1,6 +1,7 @@
 package br.com.marketlist.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -24,6 +25,8 @@ interface ProductItemDao{
     @Query("SELECT * FROM ProductItem WHERE id = :id")
     fun findItem(id: Long): ProductItem
 
+    @Query("DELETE FROM ProductItem")
+    fun deleteAll()
 
 
 }

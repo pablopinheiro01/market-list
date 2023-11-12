@@ -66,5 +66,11 @@ class MarketListViewModel @Inject constructor(
 
     }
 
+    fun onClickDeleteAllList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.deleteAll()
+        }
+    }
+
 
 }
