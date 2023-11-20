@@ -2,6 +2,7 @@ package br.com.marketlist.di.module
 
 import android.content.Context
 import androidx.room.Room
+import br.com.marketlist.database.MIGRATION_1_TO_2
 import br.com.marketlist.database.MarketAppDatabase
 import br.com.marketlist.database.ProductItemDao
 import br.com.marketlist.navigation.marketListRoute
@@ -12,6 +13,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+private const val DATABASE_NAME = "marketApp.db"
 @Module
 @InstallIn(SingletonComponent::class)
 internal class DataBaseModule {
@@ -27,8 +29,10 @@ internal class DataBaseModule {
         return Room.databaseBuilder(
             context,
             MarketAppDatabase::class.java,
-            "marketApp.db"
-        ).build()
+            DATABASE_NAME
+        )
+            .addMigrations(MIGRATION_1_TO_2)
+            .build()
     }
 
 }
