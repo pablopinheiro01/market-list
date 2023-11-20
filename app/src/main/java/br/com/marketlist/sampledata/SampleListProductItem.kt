@@ -1,6 +1,5 @@
 package br.com.marketlist.sampledata
 
-import br.com.marketlist.data.ItemsProduct
 import br.com.marketlist.data.ProductItem
 
 val sampleFirstList: List<ProductItem> = listOf(
@@ -97,9 +96,6 @@ val sampleFirstList: List<ProductItem> = listOf(
         bought = false
     ),
 )
-
-val sampleFirstItemsProduct: ItemsProduct = ItemsProduct(list = sampleFirstList)
-
 
 val stringListMarketZigBoba = """
 2 caixa de leite semi desnatado 

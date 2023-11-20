@@ -2,7 +2,6 @@ package br.com.marketlist.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.marketlist.data.ItemsProduct
 import br.com.marketlist.data.ProductItem
 import br.com.marketlist.database.ProductItemDao
 import br.com.marketlist.ui.uistate.FormMarketUiState
