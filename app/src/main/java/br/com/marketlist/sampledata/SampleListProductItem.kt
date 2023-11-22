@@ -1,6 +1,15 @@
 package br.com.marketlist.sampledata
 
+import br.com.marketlist.data.ListMarket
 import br.com.marketlist.data.ProductItem
+
+
+val sampleListItems: List<ListMarket> = listOf(
+    ListMarket(id = 0, titleList = "Titulo inicial"),
+    ListMarket(id = 0, titleList = "Titulo 2"),
+    ListMarket(id = 0, titleList = "Titulo 3"),
+
+)
 
 val sampleFirstList: List<ProductItem> = listOf(
     ProductItem(
