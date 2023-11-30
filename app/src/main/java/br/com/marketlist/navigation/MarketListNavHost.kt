@@ -8,9 +8,10 @@ import androidx.navigation.compose.NavHost
 fun MarkListNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = marketListRoute
+        startDestination = multiListScreenRoute
     ){
         marketListScreen(navController)
         formMarketListScreen(navController)
+        multiListScreen(navController)
     }
 }

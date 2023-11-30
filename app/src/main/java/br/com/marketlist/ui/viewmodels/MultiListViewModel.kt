@@ -1,5 +1,88 @@
 package br.com.marketlist.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import br.com.marketlist.data.ListMarket
+import br.com.marketlist.data.ProductItem
+import br.com.marketlist.database.ListMarketDao
+import br.com.marketlist.database.ProductItemDao
+import br.com.marketlist.ui.uistate.MultiListUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MultiListViewModel : ViewModel()
+@HiltViewModel
+class MultiListViewModel @Inject constructor(
+    private val listsDao: ListMarketDao,
+    private val itemsDao: ProductItemDao
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(MultiListUiState())
+    private lateinit var lists: List<ListMarket>
+    private lateinit var items: List<ProductItem>
+
+    val uiState: StateFlow<MultiListUiState>
+        get() = _uiState.asStateFlow()
+
+    init {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            lists = listsDao.findAll()
+
+            items = itemsDao.findAllSimple()
+
+
+            var map: MutableMap<ListMarket, List<ProductItem>> = mutableMapOf()
+            var itemsCopy: MutableList<ProductItem> = mutableListOf()
+
+            for (list in lists) {
+                for (item in items) {
+                    if (item.idListMarket == list.id) {
+                        itemsCopy.add(item)
+                    }
+                }
+                map[list] = itemsCopy.toList()
+                itemsCopy.clear()
+            }
+
+
+            _uiState.update { currentState ->
+                currentState.copy(
+                    list = map
+                )
+            }
+
+
+//            var map: MutableMap<ListMarket, List<ProductItem>> = mutableMapOf()
+//            var itemsCopy: MutableList<ProductItem> = mutableListOf()
+//
+//            for (list in lists) {
+//                map.keys.add(list)
+//                for (item in items) {
+//                    if (item.idListMarket == list.id) {
+//                        itemsCopy.add(item)
+//                    }
+//                }
+//                map.values.add(itemsCopy)
+//                itemsCopy.clear()
+//            }
+//
+//
+//            _uiState.update { currentState ->
+//                currentState.copy(
+//                    list = map
+//                )
+//            }
+
+        }
+
+
+    }
+
+}

@@ -29,5 +29,8 @@ interface ProductItemDao{
     @Query("SELECT * FROM ProductItem WHERE idListMarket = :idCurrentList")
     fun findAllWithList(idCurrentList: Long?): Flow<List<ProductItem>>
 
+    @Query("SELECT * FROM ProductItem")
+    fun findAllSimple(): List<ProductItem>
+
 
 }

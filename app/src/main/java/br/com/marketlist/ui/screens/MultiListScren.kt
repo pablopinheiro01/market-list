@@ -50,7 +50,7 @@ fun MultiListScreen(
 ) {
 
     MultiListScreen(
-        modifier = Modifier,
+        modifier = modifier,
         items = state.list,
         onClickList = { idItem ->
 //            viewModel.onClickListItem(idItem)
