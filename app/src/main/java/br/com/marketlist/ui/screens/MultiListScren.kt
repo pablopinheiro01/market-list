@@ -10,9 +10,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -20,13 +24,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import br.com.marketlist.R
 import br.com.marketlist.data.ListMarket
 import br.com.marketlist.data.ProductItem
+import br.com.marketlist.navigation.navigateToFormMarketListScreen
 import br.com.marketlist.sampledata.sampleFirstList
 import br.com.marketlist.sampledata.sampleListItems
 import br.com.marketlist.ui.theme.MarketListTheme
@@ -42,12 +49,14 @@ fun MultiListScreen(
     navController: NavController
 ) {
 
-
     MultiListScreen(
         modifier = Modifier,
         items = state.list,
         onClickList = { idItem ->
 //            viewModel.onClickListItem(idItem)
+        },
+        onClickNavigateToMarket = {
+            navController.navigateToFormMarketListScreen()
         }
     )
 
@@ -59,12 +68,25 @@ fun MultiListScreen(
 fun MultiListScreen(
     modifier: Modifier = Modifier,
     items: Map<ListMarket, List<ProductItem>> = emptyMap(),
-    onClickList: (id: Long) -> Unit = {}
+    onClickList: (id: Long) -> Unit = {},
+    onClickNavigateToMarket: () -> Unit = {},
 ) {
 
     Scaffold(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    onClickNavigateToMarket()
+                },
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(id = R.string.add_new)
+                )
+            }
+        }
     ) { paddingValues ->
 
         LazyVerticalGrid(

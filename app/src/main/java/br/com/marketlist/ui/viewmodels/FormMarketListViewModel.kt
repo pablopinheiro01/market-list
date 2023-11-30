@@ -2,7 +2,9 @@ package br.com.marketlist.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.marketlist.data.ListMarket
 import br.com.marketlist.data.ProductItem
+import br.com.marketlist.database.ListMarketDao
 import br.com.marketlist.database.ProductItemDao
 import br.com.marketlist.ui.uistate.FormMarketUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FormMarketListViewModel @Inject constructor(
-    private val dao: ProductItemDao
+    private val daoProduct: ProductItemDao,
+    private val daoListMarketDao: ListMarketDao
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FormMarketUiState())
@@ -33,6 +36,11 @@ class FormMarketListViewModel @Inject constructor(
                         showSaveBottom = false,
                     )
                 },
+                onValueChangeTitleList = { title ->
+                    _uiState.value = _uiState.value.copy(
+                        valueTitleList = title
+                    )
+                },
                 onSaveMarketList = {
                     saveMarketList()
                 }
@@ -41,14 +49,23 @@ class FormMarketListViewModel @Inject constructor(
     }
 
     fun saveMarketList() {
-        val listProductItems: MutableList<ProductItem> = mutableListOf()
-        _uiState.value.listItemsFormated.forEach { item ->
-            listProductItems.add(ProductItem(name = item))
+        viewModelScope.launch(Dispatchers.IO){
+
+            val idSaved = daoListMarketDao.save(ListMarket(titleList =  _uiState.value.valueTitleList))
+
+            val listProductItems: MutableList<ProductItem> = mutableListOf()
+            _uiState.value.listItemsFormated.forEach { item ->
+                listProductItems.add(ProductItem(name = item, idListMarket = idSaved))
+            }
+
+            daoProduct.save(listProductItems)
+
         }
+
 //        dao.save(ItemsProduct(list = listProductItems))
-        viewModelScope.launch(Dispatchers.IO) {
-            dao.save(listProductItems)
-        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            daoProduct.save(listProductItems, _uiState.value.valueTitleList)
+//        }
     }
 
     fun transformStringToItems() {

@@ -26,5 +26,8 @@ interface ProductItemDao{
     @Query("DELETE FROM ProductItem")
     fun deleteAll()
 
+    @Query("SELECT * FROM ProductItem WHERE idListMarket = :idCurrentList")
+    fun findAllWithList(idCurrentList: Long?): Flow<List<ProductItem>>
+
 
 }

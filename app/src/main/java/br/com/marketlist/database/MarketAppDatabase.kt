@@ -21,7 +21,9 @@ import br.com.marketlist.data.ProductItem
 )
 abstract class MarketAppDatabase : RoomDatabase() {
 
-    abstract fun dao(): ProductItemDao
+    abstract fun productItemDao(): ProductItemDao
+
+    abstract fun listMarketDao(): ListMarketDao
 
 }
 

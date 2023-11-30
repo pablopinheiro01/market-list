@@ -2,10 +2,10 @@ package br.com.marketlist.di.module
 
 import android.content.Context
 import androidx.room.Room
+import br.com.marketlist.database.ListMarketDao
 import br.com.marketlist.database.MIGRATION_1_TO_2
 import br.com.marketlist.database.MarketAppDatabase
 import br.com.marketlist.database.ProductItemDao
-import br.com.marketlist.navigation.marketListRoute
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,8 +19,12 @@ private const val DATABASE_NAME = "marketApp.db"
 internal class DataBaseModule {
 
     @Provides
+    fun provideListMarketDao(db: MarketAppDatabase): ListMarketDao{
+        return db.listMarketDao()
+    }
+    @Provides
     fun provideProductItemDao(db: MarketAppDatabase): ProductItemDao{
-        return db.dao()
+        return db.productItemDao()
     }
 
     @Provides

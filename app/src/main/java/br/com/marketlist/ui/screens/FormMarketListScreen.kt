@@ -9,15 +9,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -54,6 +57,9 @@ fun FormMarketListScreen(
         },
         onRemoveItemTransformed = {
             viewModel.removeOptionListTransformed(it)
+        },
+        onValueChangeTitleList = {
+            state.onValueChangeTitleList(it)
         }
     )
 }
@@ -64,6 +70,7 @@ fun FormMarketListScreen(
     modifier: Modifier = Modifier,
     state: FormMarketUiState,
     onValueChangeList: (value: String) -> Unit = {},
+    onValueChangeTitleList: (value:String) -> Unit = {},
     onClickTransformToList: () -> Unit = {},
     onSaveMarketList: () -> Unit = {},
     onRemoveItemTransformed: (position: Int) -> Unit = {}
@@ -73,7 +80,7 @@ fun FormMarketListScreen(
     val modifierTextField = if (state.showSaveBottom) {
         modifier
             .padding(start = 16.dp, top = 16.dp, bottom = 0.dp, end = 16.dp)
-            .height(90.dp)
+            .height(190.dp)
     } else {
         modifier
             .padding(start = 16.dp, top = 16.dp, bottom = 0.dp, end = 16.dp)
@@ -84,6 +91,12 @@ fun FormMarketListScreen(
             Column(
                 modifier = modifierTextField
             ) {
+                OutlinedTextField(
+                    modifier = modifier.fillMaxWidth(),
+                    value = state.valueTitleList,
+                    onValueChange = {onValueChangeTitleList(it) },
+                    label = { Text("Titulo da Lista") }
+                )
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -180,8 +193,6 @@ fun FormMarketListScreen(
 }
 
 
-
-
 @Preview(showSystemUi = true)
 @Composable
 fun FormMarketListScreenShowSaveButtomDontShowSavePreview() {
@@ -191,7 +202,14 @@ fun FormMarketListScreenShowSaveButtomDontShowSavePreview() {
                 state = FormMarketUiState(
                     valueInput = "Picanha do Boi Azul\nMaça\nManga\nBanana\nCandida Bauro\nCocokito Parabueno",
                     showSaveBottom = false,
-                    listItemsFormated = mutableListOf("Picanha do Boi Azul","Maça", "Manga", "Banana", "Candida Bauro", "Cocokito Parabueno")
+                    listItemsFormated = mutableListOf(
+                        "Picanha do Boi Azul",
+                        "Maça",
+                        "Manga",
+                        "Banana",
+                        "Candida Bauro",
+                        "Cocokito Parabueno"
+                    )
                 )
             )
         }
@@ -228,3 +246,4 @@ fun FormMarketListScreenPreview() {
         }
     }
 }
+
