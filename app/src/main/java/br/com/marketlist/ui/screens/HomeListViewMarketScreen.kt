@@ -48,14 +48,18 @@ fun HomeListViewMarketScreen(
         items = state.products,
         isShowFinishedMarket = state.isShowFinishedMarket,
         onClickNavigateToMarket = {
-            navController.navigateToFormMarketListScreen()
+//            navController.navigateToFormMarketListScreen()
         },
         onClickItemCheck = { id ->
             viewModel.onClickBoughtItem(id)
         },
         onClickDeleteAllList = {
             viewModel.onClickDeleteAllList()
-        }
+        },
+        onBack = {
+            navController.popBackStack()
+        },
+        title = state.titleList
     )
 
 }
@@ -66,10 +70,12 @@ fun HomeListViewMarketScreen(
 fun HomeListViewMarketScreen(
     modifier: Modifier = Modifier,
     items: List<ProductItem> = emptyList(),
+    title: String = "",
     isShowFinishedMarket: Boolean = false,
     onClickNavigateToMarket: () -> Unit = {},
     onClickItemCheck: (idItemClicked: Long) -> Unit = {},
-    onClickDeleteAllList: () -> Unit = {}
+    onClickDeleteAllList: () -> Unit = {},
+    onBack: () -> Unit = {}
 ) {
 
     Scaffold(
@@ -81,9 +87,9 @@ fun HomeListViewMarketScreen(
                     titleContentColor = MaterialTheme.colorScheme.primary
                 ),
 
-                title = { Text(text = stringResource(id = R.string.title_list)) },
+                title = { Text(text = title ) },
                 navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { onBack() }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Desc"
@@ -99,18 +105,6 @@ fun HomeListViewMarketScreen(
                     }
                 }
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    onClickNavigateToMarket()
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.add_new)
-                )
-            }
         }
     ) { paddingValues ->
         LazyColumn(
@@ -145,7 +139,7 @@ fun HomeListViewMarketScreen(
 fun HomeListViewMarketScreenPreview() {
     MarketListTheme {
         Surface {
-            HomeListViewMarketScreen(items = sampleFirstList)
+            HomeListViewMarketScreen(items = sampleFirstList, title = "Lista de Eletronicos")
         }
     }
 }

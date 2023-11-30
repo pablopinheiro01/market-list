@@ -16,5 +16,8 @@ interface ListMarketDao {
     @Query("SELECT * FROM ListMarket")
     fun findAll(): List<ListMarket>
 
+    @Query("SELECT ListMarket.titleList FROM ListMarket WHERE id == :id ")
+    fun findTitleItem(id: Long): String
+
 
 }
