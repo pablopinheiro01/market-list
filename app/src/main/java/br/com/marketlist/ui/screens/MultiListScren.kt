@@ -34,6 +34,7 @@ import br.com.marketlist.R
 import br.com.marketlist.data.ListMarket
 import br.com.marketlist.data.ProductItem
 import br.com.marketlist.navigation.navigateToFormMarketListScreen
+import br.com.marketlist.navigation.navigateToMarketListScreen
 import br.com.marketlist.sampledata.sampleFirstList
 import br.com.marketlist.sampledata.sampleListItems
 import br.com.marketlist.ui.theme.MarketListTheme
@@ -52,11 +53,12 @@ fun MultiListScreen(
     MultiListScreen(
         modifier = modifier,
         items = state.list,
-        onClickList = { idItem ->
+        onClickList = { idList ->
 //            viewModel.onClickListItem(idItem)
+            navController.navigateToMarketListScreen(idList)
         },
         onClickNavigateToMarket = {
-            navController.navigateToFormMarketListScreen()
+//            navController.navigateToFormMarketListScreen()
         }
     )
 

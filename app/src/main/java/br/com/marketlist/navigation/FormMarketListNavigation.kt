@@ -1,5 +1,6 @@
 package br.com.marketlist.navigation
 
+import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
@@ -12,15 +13,20 @@ import br.com.marketlist.ui.screens.FormMarketListScreen
 import br.com.marketlist.ui.viewmodels.FormMarketListViewModel
 
 const val formMarketListRoute = "formMarketList"
+const val idListArgument = "idList"
 
 fun NavGraphBuilder.formMarketListScreen(
     navController: NavHostController
 ) {
-    composable(formMarketListRoute) {
+    composable(route = "${formMarketListRoute}/${idListArgument}") {
 
         val viewModel = hiltViewModel<FormMarketListViewModel>()
         val state by viewModel.uiState.collectAsState()
         val context = LocalContext.current
+
+        val idList = it.arguments?.getString(idListArgument)
+
+        Log.i("formMarketListScreen", "$idList")
 
         FormMarketListScreen(
             state = state,
@@ -31,7 +37,7 @@ fun NavGraphBuilder.formMarketListScreen(
 }
 
 fun NavController.navigateToFormMarketListScreen(
-
+ idList: Long?
 ) {
-    navigate(formMarketListRoute)
+    navigate("${formMarketListRoute}/$idList")
 }

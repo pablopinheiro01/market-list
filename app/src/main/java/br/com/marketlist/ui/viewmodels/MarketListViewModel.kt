@@ -1,10 +1,14 @@
 package br.com.marketlist.ui.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.produceState
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.marketlist.data.ProductItem
+import br.com.marketlist.database.ListMarketDao
 import br.com.marketlist.database.ProductItemDao
+import br.com.marketlist.navigation.idListArgument
 import br.com.marketlist.ui.uistate.MarketListUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,23 +22,35 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MarketListViewModel @Inject constructor(
-    private val dao: ProductItemDao
+    private val dao: ProductItemDao,
+    private val daoListMarket: ListMarketDao,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MarketListUiState())
+
+    private val idList = savedStateHandle.get<String>(idListArgument)
 
     val uiState: StateFlow<MarketListUiState>
         get() = _uiState.asStateFlow()
 
     init {
 
-        viewModelScope.launch(Dispatchers.IO) {
-            dao.findAll().collect {
-                _uiState.value = _uiState.value.copy(
-                    products = it
-                )
+        idList?.let {
+            Log.i(TAG, "marketListScreen idList: $idList")
+
+            viewModelScope.launch(Dispatchers.IO) {
+                val titleString = daoListMarket.findTitleItem(idList.toLong())
+                dao.findAllWithList(idList.toLong()).collect {productsList ->
+                    _uiState.value = _uiState.value.copy(
+                        products = productsList,
+                        titleList =titleString
+
+                    )
+                }
             }
         }
+
 
     }
 
@@ -70,6 +86,10 @@ class MarketListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             dao.deleteAll()
         }
+    }
+
+    companion object {
+        const val TAG = "MarketListViewModel"
     }
 
 
