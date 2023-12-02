@@ -1,6 +1,7 @@
 package br.com.marketlist.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,10 +15,13 @@ interface ListMarketDao {
     fun save(list: ListMarket): Long
 
     @Query("SELECT * FROM ListMarket")
-    fun findAll(): List<ListMarket>
+    fun findAll(): Flow<List<ListMarket>>
 
-    @Query("SELECT ListMarket.titleList FROM ListMarket WHERE id == :id ")
-    fun findTitleItem(id: Long): String
+    @Query("SELECT * FROM ListMarket WHERE id == :id ")
+    fun findItem(id: Long): ListMarket
+
+    @Delete
+    fun delete(listMarket: ListMarket)
 
 
 }
