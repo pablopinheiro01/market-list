@@ -1,7 +1,6 @@
 package br.com.marketlist.ui.viewmodels
 
 import android.util.Log
-import androidx.compose.runtime.produceState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,35 +38,33 @@ class MarketListViewModel @Inject constructor(
             Log.i(TAG, "marketListScreen idList: $idList")
 
             viewModelScope.launch(Dispatchers.IO) {
-                val titleString = daoListMarket.findTitleItem(idList.toLong())
-                dao.findAllWithList(idList.toLong()).collect {productsList ->
+                val listMarket = daoListMarket.findItem(idList.toLong())
+                dao.findAllWithList(idList.toLong()).collect { productsList ->
                     _uiState.value = _uiState.value.copy(
                         products = productsList,
-                        titleList =titleString
+                        titleList = listMarket.titleList
 
                     )
                 }
             }
         }
 
-
     }
 
     fun onClickBoughtItem(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             val item = dao.findItem(id)
-            var productsModify: List<ProductItem> = emptyList()
 
             item.apply {
                 this.bought = !this.bought
             }
 
-            productsModify = _uiState.value.products
+            var productsModify: List<ProductItem> = _uiState.value.products
                 .map { itemState ->
                     if (itemState.id == item.id) itemState.copy(bought = true) else itemState
                 }
+
             val verifiedObjects = productsModify.all { it.bought }
-//           productsModify = productsModify.sortedBy { it.bought }
 
             _uiState.update { currentState ->
                 currentState.copy(
@@ -84,7 +80,9 @@ class MarketListViewModel @Inject constructor(
 
     fun onClickDeleteAllList() {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.deleteAll()
+            idList?.toLong()?.let { daoListMarket.findItem(it) }?.run {
+                daoListMarket.delete(this)
+            }
         }
     }
 
