@@ -15,9 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import br.com.marketlist.navigation.MarkListNavHost
-import br.com.marketlist.navigation.navigateToFormMarketListScreen
-import br.com.marketlist.sampledata.sampleFirstList
-import br.com.marketlist.ui.screens.HomeListViewMarketScreen
 import br.com.marketlist.ui.theme.MarketListTheme
 import dagger.hilt.android.AndroidEntryPoint
 
