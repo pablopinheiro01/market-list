@@ -12,6 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,13 +35,20 @@ class MultiListViewModel @Inject constructor(
     init {
 
         viewModelScope.launch(Dispatchers.IO) {
-            lists = listsDao.findAll()
+            listsDao.findAll().combine(itemsDao.findAll()){ markets, products ->
+                lists = markets
+                items = products
+            }.collect{
+                updateListToShow()
+            }
+        }
+    }
 
-            items = itemsDao.findAllSimple()
+    fun updateListToShow() {
+        var map: MutableMap<ListMarket, List<ProductItem>> = mutableMapOf()
+        var itemsCopy: MutableList<ProductItem> = mutableListOf()
 
-
-            var map: MutableMap<ListMarket, List<ProductItem>> = mutableMapOf()
-            var itemsCopy: MutableList<ProductItem> = mutableListOf()
+        if(lists.isNotEmpty() || items.isNotEmpty()){
 
             for (list in lists) {
                 for (item in items) {
@@ -51,38 +60,11 @@ class MultiListViewModel @Inject constructor(
                 itemsCopy.clear()
             }
 
-
-            _uiState.update { currentState ->
-                currentState.copy(
-                    list = map
-                )
-            }
-
-
-//            var map: MutableMap<ListMarket, List<ProductItem>> = mutableMapOf()
-//            var itemsCopy: MutableList<ProductItem> = mutableListOf()
-//
-//            for (list in lists) {
-//                map.keys.add(list)
-//                for (item in items) {
-//                    if (item.idListMarket == list.id) {
-//                        itemsCopy.add(item)
-//                    }
-//                }
-//                map.values.add(itemsCopy)
-//                itemsCopy.clear()
-//            }
-//
-//
-//            _uiState.update { currentState ->
-//                currentState.copy(
-//                    list = map
-//                )
-//            }
-
+            _uiState.value = _uiState.value.copy(
+                list = map
+            )
         }
-
-
     }
+
 
 }
