@@ -9,8 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import br.com.marketlist.sampledata.sampleFirstList
-import br.com.marketlist.ui.screens.HomeListViewMarketScreen
+import br.com.marketlist.ui.screens.ListViewMarketScreen
 import br.com.marketlist.ui.viewmodels.MarketListViewModel
 
 const val marketListRoute = "marketList"
@@ -27,7 +26,7 @@ fun NavGraphBuilder.marketListScreen(
 
         Log.i("marketListScreen", "$idList")
 
-        HomeListViewMarketScreen(
+        ListViewMarketScreen(
             state = state,
             viewModel = viewModel ,
             navController = navController

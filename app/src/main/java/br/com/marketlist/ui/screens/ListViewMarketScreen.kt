@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,13 +21,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import br.com.marketlist.R
 import br.com.marketlist.data.ProductItem
-import br.com.marketlist.navigation.navigateToFormMarketListScreen
 import br.com.marketlist.sampledata.sampleFirstList
 import br.com.marketlist.ui.components.ProductItemCardComponent
 import br.com.marketlist.ui.theme.MarketListTheme
@@ -37,13 +32,13 @@ import br.com.marketlist.ui.uistate.MarketListUiState
 import br.com.marketlist.ui.viewmodels.MarketListViewModel
 
 @Composable
-fun HomeListViewMarketScreen(
+fun ListViewMarketScreen(
     state: MarketListUiState,
     viewModel: MarketListViewModel,
     navController: NavController
 ) {
 
-    HomeListViewMarketScreen(
+    ListViewMarketScreen(
         modifier = Modifier,
         items = state.products,
         isShowFinishedMarket = state.isShowFinishedMarket,
@@ -55,6 +50,7 @@ fun HomeListViewMarketScreen(
         },
         onClickDeleteAllList = {
             viewModel.onClickDeleteAllList()
+            navController.popBackStack()
         },
         onBack = {
             navController.popBackStack()
@@ -67,7 +63,7 @@ fun HomeListViewMarketScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeListViewMarketScreen(
+fun ListViewMarketScreen(
     modifier: Modifier = Modifier,
     items: List<ProductItem> = emptyList(),
     title: String = "",
@@ -87,7 +83,7 @@ fun HomeListViewMarketScreen(
                     titleContentColor = MaterialTheme.colorScheme.primary
                 ),
 
-                title = { Text(text = title ) },
+                title = { Text(text = title) },
                 navigationIcon = {
                     IconButton(onClick = { onBack() }) {
                         Icon(
@@ -115,18 +111,16 @@ fun HomeListViewMarketScreen(
             if (!isShowFinishedMarket) {
                 item { Spacer(modifier = modifier) }
                 items(items) { item ->
-                    if (!item.bought) {
-                        ProductItemCardComponent(
-                            item = item,
-                            onClickItem = { idItemClicked ->
-                                onClickItemCheck(idItemClicked)
-                            }
-                        )
-                    }
+                    ProductItemCardComponent(
+                        item = item,
+                        onClickItem = { idItemClicked ->
+                            onClickItemCheck(idItemClicked)
+                        }
+                    )
                 }
                 item { Spacer(modifier = modifier) }
-            }else{
-                item{Text(text = "Finished Congrats!")}
+            } else {
+                item { Text(text = "Finished Congrats!") }
             }
         }
     }
@@ -139,7 +133,7 @@ fun HomeListViewMarketScreen(
 fun HomeListViewMarketScreenPreview() {
     MarketListTheme {
         Surface {
-            HomeListViewMarketScreen(items = sampleFirstList, title = "Lista de Eletronicos")
+            ListViewMarketScreen(items = sampleFirstList, title = "Lista de Eletronicos")
         }
     }
 }
@@ -150,7 +144,7 @@ fun HomeListViewMarketScreenPreview() {
 fun HomeListViewMarketScreenPreviewEmtpyList() {
     MarketListTheme {
         Surface {
-            HomeListViewMarketScreen(isShowFinishedMarket = true, items = emptyList())
+            ListViewMarketScreen(isShowFinishedMarket = true, items = emptyList())
         }
     }
 }

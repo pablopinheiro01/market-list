@@ -18,7 +18,7 @@ const val idListArgument = "idList"
 fun NavGraphBuilder.formMarketListScreen(
     navController: NavHostController
 ) {
-    composable(route = "${formMarketListRoute}/${idListArgument}") {
+    composable(route = "${formMarketListRoute}/{$idListArgument}") {
 
         val viewModel = hiltViewModel<FormMarketListViewModel>()
         val state by viewModel.uiState.collectAsState()
