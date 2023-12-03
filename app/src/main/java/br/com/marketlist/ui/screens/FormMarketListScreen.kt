@@ -13,14 +13,22 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -60,6 +68,9 @@ fun FormMarketListScreen(
         },
         onValueChangeTitleList = {
             state.onValueChangeTitleList(it)
+        },
+        onClickBack = {
+            navController.navigateUp()
         }
     )
 }
@@ -73,7 +84,8 @@ fun FormMarketListScreen(
     onValueChangeTitleList: (value:String) -> Unit = {},
     onClickTransformToList: () -> Unit = {},
     onSaveMarketList: () -> Unit = {},
-    onRemoveItemTransformed: (position: Int) -> Unit = {}
+    onRemoveItemTransformed: (position: Int) -> Unit = {},
+    onClickBack: () -> Unit = {}
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -86,7 +98,28 @@ fun FormMarketListScreen(
             .padding(start = 16.dp, top = 16.dp, bottom = 0.dp, end = 16.dp)
     }
 
-    Scaffold { paddingValues ->
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary
+                ),
+
+                title = { Text(text = "Cadastrar Lista") },
+                navigationIcon = {
+                    IconButton(onClick = { onClickBack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Desc"
+                        )
+                    }
+                },
+            )
+        }
+
+    ) { paddingValues ->
         Column(modifier.padding(paddingValues)) {
             Column(
                 modifier = modifierTextField

@@ -58,7 +58,7 @@ fun MultiListScreen(
             navController.navigateToMarketListScreen(idList)
         },
         onClickNavigateToMarket = {
-            navController.navigateToFormMarketListScreen(null)
+            navController.navigateToFormMarketListScreen()
         }
     )
 

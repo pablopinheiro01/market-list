@@ -36,8 +36,6 @@ fun NavGraphBuilder.formMarketListScreen(
     }
 }
 
-fun NavController.navigateToFormMarketListScreen(
- idList: Long?
-) {
+fun NavController.navigateToFormMarketListScreen(idList: Long = -1) {
     navigate("${formMarketListRoute}/$idList")
 }
